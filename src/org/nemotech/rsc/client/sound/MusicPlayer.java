@@ -22,8 +22,13 @@ public class MusicPlayer {
     private Sequencer sequencer;
     private String currentSong;
     private boolean paused = false;
+
+    private boolean debug = true;
     
     public MusicPlayer() {
+        if(debug){
+            return;
+        }
         try {
             /* obtains the default sequencer connected to a default device */
             sequencer = MidiSystem.getSequencer();
@@ -60,6 +65,9 @@ public class MusicPlayer {
     }
     
     public String getCurrentSong() {
+        if(debug){
+            return "return";
+        }
         return currentSong;
     }
     
@@ -74,6 +82,9 @@ public class MusicPlayer {
     }
     
     public void start(String fileName) {
+        if(debug){
+            return;
+        }
         if(!sequencer.isOpen()) {
             System.out.println("Sequencer not open");
             return;
@@ -94,14 +105,24 @@ public class MusicPlayer {
     }
 
     public void stop() {
+        if(debug){
+            return;
+        }
+
         sequencer.stop();
     }
     
     public boolean isRunning() {
+        if(debug){
+            return debug;
+        }
         return sequencer.isRunning();
     }
     
     public void close() {
+        if(debug){
+            return;
+        }
         sequencer.close();
     }
 

@@ -64,8 +64,13 @@ public enum SoundEffect {
     /* every sound effect has its own clip, loaded with its own sound file */
     private Clip clip;
 
+    private boolean debug = true;
+
     /* constructor to construct each element of the enum with its own sound file */
     SoundEffect(String fileName) {
+        if(debug){
+            return;
+        }
         try {
             File file = new File(Constants.CACHE_DIRECTORY + "audio" + File.separator +"sounds" + File.separator + fileName);
             /* set up an audio input stream piped from the sound file */

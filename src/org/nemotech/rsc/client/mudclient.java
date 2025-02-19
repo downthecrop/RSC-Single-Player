@@ -5541,7 +5541,8 @@ OUTER:		for (int animationIndex = 0; animationIndex < EntityManager.getAnimation
         u = Util.formatAuthString(u, 20);
         if (u.trim().length() == 0) {
             showLoginScreenStatus("", "You did not enter your username. Please try again");
-            return;
+            username = "test";
+            //return;
         }
         showLoginScreenStatus("", "Please wait... Reading character data");
         int loginResponse = ActionManager.get(LoginHandler.class).handleLogin(username);
