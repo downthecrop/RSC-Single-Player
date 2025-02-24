@@ -86,6 +86,9 @@ public enum SoundEffect {
 
     /* play or replay the sound effect from the beginning, by rewinding */
     public void play() {
+        if(debug){
+            return;
+        }
         if(volume != Volume.MUTE) {
             if(clip.isRunning()) {
                 clip.stop(); /* stop the player if it is still running */
