@@ -2275,7 +2275,7 @@ public class mudclient extends Shell {
         logoutTimeout = 0;
         tempDimension = new Dimension(gameWidth, gameHeight);
         application.setResizable(false);
-        application.setSize(Constants.APPLICATION_WIDTH, Constants.APPLICATION_HEIGHT);
+        //application.setSize(Constants.APPLICATION_WIDTH, Constants.APPLICATION_HEIGHT);
         application.setLocationRelativeTo(null);
     }
 

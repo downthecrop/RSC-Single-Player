@@ -13,6 +13,7 @@ public class Application extends Frame {
         this.shell = shell;
         setTitle(Constants.APPLICATION_TITLE);
         setBackground(Color.BLACK);
+        setUndecorated(true);
         setResizable(true);
         pack();
         toFront();
