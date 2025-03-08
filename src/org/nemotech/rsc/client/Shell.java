@@ -50,7 +50,7 @@ public abstract class Shell extends Panel implements Runnable, MouseListener, Mo
     private final String CHAR_MAP = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!\"\243$%^&*()-_=+[{]};:'@#~,<.>/?\\| ";
     
     public String logoHeaderText, inputTextCurrent, inputTextFinal, loadingProgessText;
-    public boolean keyLeft, keyRight, keyUp, keyDown, keySpace, interlace, closing;
+    public boolean keyLeft, keyRight, keyUp, rightClick, keyDown, keySpace, interlace, closing;
     public int threadSleep, mouseX, mouseY, mouseButtonDown, lastMouseButtonDown, stopTimeout, interlaceTimer,
         loadingProgressPercent, panelWidth, panelHeight, targetFps, maxDrawTime, loadingStep;
     private long[] timings;
@@ -116,12 +116,20 @@ public abstract class Shell extends Panel implements Runnable, MouseListener, Mo
 
     @Override
     public synchronized void keyPressed(KeyEvent e) {
-        char chr = e.getKeyChar();
+        int left = 37;
+        int right = 39;
         int code = e.getKeyCode();
+        char chr = e.getKeyChar();
+        if(code != left && code != right)
+            chr = Character.toLowerCase((char) e.getKeyCode());
+        System.out.println("Char: "+chr + " Code: "+code);
         handleKeyPress(chr);
         switch (code) {
             case KeyEvent.VK_LEFT:
                 keyLeft = true;
+                break;
+            case KeyEvent.VK_F11:
+                rightClick = !rightClick;
                 break;
             case KeyEvent.VK_RIGHT:
                 keyRight = true;
@@ -168,19 +176,19 @@ public abstract class Shell extends Panel implements Runnable, MouseListener, Mo
         int code = e.getKeyCode();
         switch (code) {
             case KeyEvent.VK_LEFT:
-                keyLeft = false;
+                //keyLeft = false;
                 break;
             case KeyEvent.VK_RIGHT:
-                keyRight = false;
+                //keyRight = false;
                 break;
             case KeyEvent.VK_UP:
-                keyUp = false;
+                //keyUp = false;
                 break;
             case KeyEvent.VK_DOWN:
-                keyDown = false;
+               //keyDown = false;
                 break;
             case KeyEvent.VK_SPACE:
-                keySpace = false;
+                //keySpace = false;
                 break;
             default:
                 break;
@@ -190,25 +198,26 @@ public abstract class Shell extends Panel implements Runnable, MouseListener, Mo
     @Override
     public synchronized void mouseMoved(MouseEvent e) {
         mouseX = e.getX();
-        mouseY = e.getY();
+        mouseY = e.getY() + 22;
         mouseButtonDown = 0;
     }
 
     @Override
     public synchronized void mouseReleased(MouseEvent e) {
         mouseX = e.getX();
-        mouseY = e.getY();
+        mouseY = e.getY() + 22;
         mouseButtonDown = 0;
     }
 
     @Override
     public synchronized void mousePressed(MouseEvent e) {
         int x = e.getX();
-        int y = e.getY();
+        int y = e.getY() + 22;
         mouseX = x;
         mouseY = y;
-        if (e.isMetaDown()) {
+        if (e.isMetaDown() || rightClick) {
             mouseButtonDown = 2;
+            rightClick = false;
         } else {
             mouseButtonDown = 1;
         }
@@ -222,8 +231,8 @@ public abstract class Shell extends Panel implements Runnable, MouseListener, Mo
     @Override
     public synchronized void mouseDragged(MouseEvent e) {
         mouseX = e.getX();
-        mouseY = e.getY();
-        if (e.isMetaDown()) {
+        mouseY = e.getY() + 22;
+        if (e.isMetaDown() || rightClick) {
             mouseButtonDown = 2;
         } else {
             mouseButtonDown = 1;

@@ -54,13 +54,13 @@ public class Application extends Frame {
     @Override
     public Graphics getGraphics() {
         Graphics graphics = super.getGraphics();
-        graphics.translate(0, 22);
+        graphics.translate(0, 0);
         return graphics;
     }
 
     @Override
     public void setSize(int x, int y) {
-        super.setSize(x, y + 32);
+        super.setSize(x, y);
     }
 
     @Override

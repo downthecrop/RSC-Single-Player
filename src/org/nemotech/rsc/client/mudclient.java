@@ -798,7 +798,7 @@ public class mudclient extends Shell {
     private void createMessageTabPanel() {
         /* changes to chat cursors and messages height goes here (and scrollbars for them) */
         panelMessageTabs = new Menu(surface, 10);
-        int OFFSET = 20;
+        int OFFSET = 0;
         controlTextListChat = panelMessageTabs.addTextListScrollable(5, gameHeight - 55 - 12-OFFSET/*269*/, gameWidth - 10, 56, 1, 20, true);
         controlTextListAll = panelMessageTabs.addTextListInput(7, gameHeight - 10-OFFSET/*324*/, gameWidth - 10 - 2, 14, 1, 80, false, true);
         controlTextListQuest = panelMessageTabs.addTextListScrollable(5, gameHeight - 55 - 12-OFFSET/*269*/, gameWidth - 10, 56, 1, 20, true);
@@ -1532,7 +1532,7 @@ public class mudclient extends Shell {
             super.lastMouseButtonDown = 0;
             return;
         }
-        int OFFSET = 20;
+        int OFFSET = 0;
         if (super.mouseY > gameHeight - 4 - OFFSET) {
             if (super.mouseX > 15 + (gameWidth / 2 - 256) && super.mouseX < 96 + (gameWidth / 2 - 256) && super.lastMouseButtonDown == 1) {
                 messageTabSelected = 0;
@@ -1623,8 +1623,10 @@ public class mudclient extends Shell {
                 }
             }
         } else if (super.keyLeft) {
+            super.keyLeft = false;
             cameraRotation = cameraRotation + 2 & 255;// 0xff;
         } else if (super.keyRight) {
+            super.keyRight = false;
             cameraRotation = cameraRotation - 2 & 255;// 0xff;
         } else if (super.keyDown) {
             //
@@ -3072,8 +3074,13 @@ OUTER:		for (int animationIndex = 0; animationIndex < EntityManager.getAnimation
     }
 
     private void drawChatMessageTabs() {
+        // Disabled for now
+        if(true)
+            return;
+
+
         /* bottom blue bar */
-        int OFFSET = 20;
+        int OFFSET = 0;
         surface.drawSprite(0, gameHeight-OFFSET, spriteMedia + 22);
         /* extended bottom blue bar */
         surface.drawSprite(gameWidth - 512, gameHeight-OFFSET, spriteMedia + 22);
@@ -5541,7 +5548,7 @@ OUTER:		for (int animationIndex = 0; animationIndex < EntityManager.getAnimation
         u = Util.formatAuthString(u, 20);
         if (u.trim().length() == 0) {
             showLoginScreenStatus("", "You did not enter your username. Please try again");
-            username = "testPlayer";
+            username = "Android";
             ActionManager.get(RegisterHandler.class).handleRegister(username); // create if it isn't already made.
             //return;
         }

@@ -22,7 +22,7 @@ public class Constants {
 
     public static final int APPLICATION_WIDTH = 950, APPLICATION_HEIGHT = 500;
     
-    public static final boolean APPLICATION_RESIZABLE = true;
+    public static final boolean APPLICATION_RESIZABLE = false;
     
     public static final String CACHE_DIRECTORY = System.getProperty("user.dir") + File.separator + "cache" + File.separator; // Java only
     
