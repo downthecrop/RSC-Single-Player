@@ -26,12 +26,11 @@ import org.nemotech.rsc.model.player.states.CombatState;
 
 import org.nemotech.rsc.client.update.impl.MiscUpdater;
 
+import java.io.*;
 import java.util.*;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.zip.GZIPOutputStream;
+
 import org.nemotech.rsc.client.mudclient;
 import org.nemotech.rsc.event.impl.BatchEvent;
 import org.nemotech.rsc.client.sound.SoundEffect;
@@ -957,23 +956,63 @@ public final class Player extends Mob {
     public void save() {
         // save player data
         playerData.save(this);
-        try {
-            // save serialized player cache file
-            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(Constants.CACHE_DIRECTORY + "players/" + username + "_cache.dat"));
+
+        // === Save cache ===
+        try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+             ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(byteArrayOutputStream))) {
+
             oos.writeObject(cache);
-            oos.close();
-        } catch (Exception e) {
+            oos.flush();  // Ensure all data is written to the ByteArrayOutputStream
+
+            byte[] serializedData = byteArrayOutputStream.toByteArray();
+
+            // Compress and encode
+            String compressedBase64 = compressAndEncode(serializedData);
+            System.out.println("pCACHE " + compressedBase64);
+
+            // Save uncompressed serialized data to file
+            try (FileOutputStream fos = new FileOutputStream(Constants.CACHE_DIRECTORY + "players/" + username + "_cache.dat")) {
+                fos.write(serializedData);
+            }
+
+        } catch (IOException e) {
             e.printStackTrace();
         }
-        try {
-            // save serialized player data file
-            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(Constants.CACHE_DIRECTORY + "players/" + username + "_data.dat"));
+
+        // === Save playerData ===
+        try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+             ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(byteArrayOutputStream))) {
+
             oos.writeObject(playerData);
-            oos.close();
-        } catch (Exception e) {
+            oos.flush();  // Ensure all data is written to the ByteArrayOutputStream
+
+            byte[] serializedData = byteArrayOutputStream.toByteArray();
+
+            // Compress and encode
+            String compressedBase64 = compressAndEncode(serializedData);
+            System.out.println("pDAT " + compressedBase64);
+
+            // Save uncompressed serialized data to file
+            try (FileOutputStream fos = new FileOutputStream(Constants.CACHE_DIRECTORY + "players/" + username + "_data.dat")) {
+                fos.write(serializedData);
+            }
+
+        } catch (IOException e) {
             e.printStackTrace();
         }
+
+        System.out.println("Saved");
     }
+
+    private String compressAndEncode(byte[] data) throws IOException {
+        ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+        try (GZIPOutputStream gzipStream = new GZIPOutputStream(byteStream)) {
+            gzipStream.write(data);
+        }
+        byte[] compressed = byteStream.toByteArray();
+        return Base64.getEncoder().encodeToString(compressed);
+    }
+
 
     public void setCharged() {
         lastCharge = System.currentTimeMillis();
