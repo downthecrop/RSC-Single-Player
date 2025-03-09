@@ -956,6 +956,7 @@ public final class Player extends Mob {
     public void save() {
         // save player data
         playerData.save(this);
+        boolean isAndroid = System.getProperty("os.version").contains("Android");
 
         // === Save cache ===
         try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -971,8 +972,10 @@ public final class Player extends Mob {
             System.out.println("pCACHE " + compressedBase64);
 
             // Save uncompressed serialized data to file
-            try (FileOutputStream fos = new FileOutputStream(Constants.CACHE_DIRECTORY + "players/" + username + "_cache.dat")) {
-                fos.write(serializedData);
+            if(!isAndroid){
+                try (FileOutputStream fos = new FileOutputStream(Constants.CACHE_DIRECTORY + "players/" + username + "_cache.dat")) {
+                    fos.write(serializedData);
+                }
             }
 
         } catch (IOException e) {
@@ -993,8 +996,10 @@ public final class Player extends Mob {
             System.out.println("pDAT " + compressedBase64);
 
             // Save uncompressed serialized data to file
-            try (FileOutputStream fos = new FileOutputStream(Constants.CACHE_DIRECTORY + "players/" + username + "_data.dat")) {
-                fos.write(serializedData);
+            if(!isAndroid){
+                try (FileOutputStream fos = new FileOutputStream(Constants.CACHE_DIRECTORY + "players/" + username + "_data.dat")) {
+                    fos.write(serializedData);
+                }
             }
 
         } catch (IOException e) {
